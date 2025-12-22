@@ -1,0 +1,42 @@
+/* BookList.css - Flex 响应式布局（核心） */
+.book-list-container {
+  /* 基础 Flex 布局 */
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px; 
+  padding: 16px; 
+  max-width: 1440px; 
+  margin: 0 auto; 
+}
+
+/* 图书卡片适配：最小宽度280px，剩余空间均分 */
+.book-list-container > .BookCard {
+  flex: 1 1 280px;
+  min-width: 240px; 
+}
+
+/* 媒体查询精细化适配 */
+@media (max-width: 575px) {
+  .book-list-container {
+    gap: 16px;
+  }
+  .book-list-container > .BookCard {
+    flex: 1 1 calc(50% - 10px); /* 50%宽度 - gap的一半 = 刚好2列 */
+    min-width: unset; /* 取消最小宽度限制 */
+  }
+}
+
+/* 平板（768px ~ 992px）：强制2列 */
+@media (min-width: 768px) and (max-width: 991px) {
+  .book-list-container > .BookCard {
+    flex: 1 1 calc(50% - 10px); /* 2列均分，减去gap间距 */
+  }
+}
+
+/* 大屏（> 1200px）：最多4列 */
+@media (min-width: 1200px) {
+  .book-list-container > .BookCard {
+    flex: 1 1 calc(25% - 15px); /* 4列均分，减去gap间距 */
+    max-width: calc(25% - 15px); /* 限制最大宽度，避免列数超过4 */
+  }
+}

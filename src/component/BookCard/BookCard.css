@@ -1,0 +1,133 @@
+.BookCard {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex-shrink: 0;
+  position: relative; 
+  overflow: hidden; 
+  transition: all 0.3s ease;
+}
+
+.BookCard:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px); 
+  border-color: #f0f4f9;
+}
+
+/* 图片容器固定尺寸 + 宽高比 */
+.book-img-container {
+  width: 100%;
+  /* 固定高度，或用 aspect-ratio 更灵活 */
+  height: 220px; /* 统一图片区域高度，可根据需求调整 */
+  border-radius: 4px;
+  overflow: hidden; /* 裁剪超出部分 */
+  display: flex;
+  align-items: center; /* 垂直居中 */
+  justify-content: center; /* 水平居中 */
+  background-color: #f8fafc; /* 图片加载前的占位背景 */
+}
+
+/* 图片自适应容器 */
+.BookCard img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.BookName {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.AuthorName {
+  color: #64748b;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+/* 新增：得分样式 */
+.BookPoints {
+  color: #475569;
+  font-size: 0.85rem;
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+
+.price-cart-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+}
+
+.Price {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+.discount-price {
+  color: rgb(221, 78, 78);
+}
+.original-price {
+  color: #94a3b8;
+  text-decoration: line-through;
+  margin-left: 8px;
+}
+
+.shopCart {
+  border: none;
+  background: rgba(108, 151, 220, 0.4);
+  color: #64748b; 
+  border-radius: 50%; 
+  cursor: pointer; 
+  padding: 8px; 
+  font-size: 1rem; 
+  transition: all 0.2s ease; 
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+}
+
+.shopCart:hover {
+  background: rgba(59, 130, 246, 0.6); 
+  color: blue; 
+  transform: scale(1.05); 
+}
+
+.shopCart:focus {
+  outline: none;
+}
+
+.feature-tag-container {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 10;
+  max-width: calc(100% - 8px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.feature-tag {
+  background-color: #ff7d00;
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 0 4px 0 4px;
+  white-space: nowrap;
+  margin: 8px; 
+}
