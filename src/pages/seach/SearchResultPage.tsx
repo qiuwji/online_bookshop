@@ -47,7 +47,6 @@ const SearchResultPage: React.FC = () => {
   const totalPages = Math.ceil(totalBooks / PAGE_SIZE);
 
   /** ===== 当前页数据 ===== */
-  const currentPageBooks = books;
 
   // 加载搜索结果
   useEffect(() => {
@@ -61,14 +60,14 @@ const SearchResultPage: React.FC = () => {
         
         if (response) {
           setBooks(response.list.map(book => ({
-            bookId: book.bookId,
+            bookId: book.id,
             bookName: book.bookName,
-            imageUrl: book.imageUrl,
+            imageUrl: book.bookCover,
             author: book.author,
-            price: 0,
-            discountPrice: book.discountPrice,
+            price: book.price,
+            discountPrice: book.price * book.discountRate,
             featureLabel: book.featureLabel,
-            points: book.points
+            points: book.totalScore
           })));
           setTotalBooks(response.total);
         }

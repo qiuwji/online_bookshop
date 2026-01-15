@@ -73,27 +73,27 @@ const HomePage: React.FC = () => {
         // 转换API响应格式为BookCardProps格式
         if (hotResponse) {
           setHotBooks(hotResponse.list.map(book => ({
-            bookId: book.bookId,
+            bookId: book.id,
             bookName: book.bookName,
-            imageUrl: book.imageUrl,
+            imageUrl: book.bookCover,
             author: book.author,
-            price: 0,
-            discountPrice: book.discountPrice,
+            price: book.price,
+            discountPrice: book.price * book.discountRate,
             featureLabel: book.featureLabel,
-            points: book.points
+            points: book.totalScore
           })));
         }
 
         if (newResponse) {
           setNewBooks(newResponse.list.map(book => ({
-            bookId: book.bookId,
+            bookId: book.id,
             bookName: book.bookName,
-            imageUrl: book.imageUrl,
+            imageUrl: book.bookCover,
             author: book.author,
-            price: 0,
-            discountPrice: book.discountPrice,
+            price: book.price,
+            discountPrice: book.price * book.discountRate,
             featureLabel: book.featureLabel,
-            points: book.points
+            points: book.totalScore
           })));
         }
       } catch (error) {

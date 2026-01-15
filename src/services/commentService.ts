@@ -1,5 +1,5 @@
 import { api } from './http';
-import { uploadImage, uploadImages, UploadData } from './uploadService';
+import { uploadImages, type UploadData } from './uploadService';
 
 /**
  * 评论项

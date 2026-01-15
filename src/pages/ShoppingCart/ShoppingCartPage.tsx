@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { getCart, updateCartItem, removeFromCart, getCartTotal } from '@/services/cartService';
+import { getCart, updateCartItem, removeFromCart } from '@/services/cartService';
 import { createOrder } from '@/services/orderService';
 import { useIsLogin } from '@/store/useAuthStore';
 
@@ -12,6 +12,7 @@ interface CartItem {
   author: string;
   price: number;
   discountPrice: number;
+  originalPrice: number;
   quantity: number;
   count: number;
   selected: boolean;
@@ -40,13 +41,14 @@ const ShoppingCartPage = () => {
             id: item.id,
             bookId: item.bookId,
             bookName: item.bookName,
-            imageUrl: item.imageUrl,
-            author: item.author,
-            price: item.price,
-            discountPrice: item.discountPrice,
+            imageUrl: item.imageUrl || '',
+            author: item.author || '',
+            price: item.price || 0,
+            discountPrice: item.discountPrice || 0,
+            originalPrice: item.price || 0,
             quantity: item.count,
             count: item.count,
-            selected: item.selected
+            selected: item.selected || false
           })));
         }
       } catch (error) {

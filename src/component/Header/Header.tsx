@@ -1,5 +1,5 @@
 import { useCartCount, useIsLogin } from "@/store/useAuthStore";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import BookStoreLogo from "../../assets/ONLINE-BOOKSTORE.jpeg";
 import "font-awesome/css/font-awesome.min.css";
@@ -15,6 +15,7 @@ const Toast: React.FC<{ message: string }> = ({ message }) => {
 
 const Header: React.FC = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const isLogin = useIsLogin();
   const cartCount = useCartCount();
   const currentPath = location.pathname;
@@ -38,7 +39,8 @@ const Header: React.FC = () => {
       return;
     }
     console.log("搜索内容：", trimmed);
-    // TODO: 跳转搜索页 / 发起 API 请求
+    // 跳转到搜索结果页面，并传递搜索关键词
+    navigate(`/search?keyword=${encodeURIComponent(trimmed)}`);
   };
 
   return (

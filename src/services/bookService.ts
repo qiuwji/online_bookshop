@@ -1,17 +1,16 @@
 import api from './http';
 
-// ============ 请求/响应接口定义 ============
-
 /**
  * 图书列表项
  */
 export interface BookListItem {
-  bookId: number;
+  id: number;
   bookName: string;
-  imageUrl: string;
+  bookCover: string;
   author: string;
-  discountPrice: number;
-  points: number;
+  price: number;
+  discountRate: number;
+  totalScore: number;
   featureLabel: string;
 }
 
@@ -42,16 +41,16 @@ export interface GetBooksParams {
 export interface BookDetail {
   id: number;
   bookName: string;
-  book_cover: string;
+  bookCover: string;
   author: string;
   publisher: string;
-  ISBN: string;
+  isbn: string;
   price: number;
-  discount_rate: number;
-  comment_count: number;
-  total_score: number;
+  discountRate: number;
+  commentCount: number;
+  totalScore: number;
   stock: number;
-  publish_time: string;
+  publishTime: string;
   category: string;
   isFavorited: boolean;
 }

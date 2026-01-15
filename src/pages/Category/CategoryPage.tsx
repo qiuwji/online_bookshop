@@ -5,7 +5,7 @@ import { getBooksByCategory } from '@/services/bookService';
 import type { BookCardProps } from '@/component/BookCard/BookCard';
 
 const CategoryPage = () => {
-  const [categories, setCategories] = useState<Category[]>([
+  const [categories] = useState<Category[]>([
     {
       id: 1,
       name: '前端开发',
@@ -106,14 +106,14 @@ const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
         
         if (response) {
           setBooks(response.list.map(book => ({
-            bookId: book.bookId,
+            bookId: book.id,
             bookName: book.bookName,
-            imageUrl: book.imageUrl,
+            imageUrl: book.bookCover,
             author: book.author,
-            price: 0,
-            discountPrice: book.discountPrice,
+            price: book.price,
+            discountPrice: book.price * book.discountRate,
             featureLabel: book.featureLabel,
-            points: book.points
+            points: book.totalScore
           })));
         }
       } catch (error) {
@@ -186,34 +186,6 @@ const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
   }
 
   // 将Book转换为BookCardProps
-  // 计算过滤后的书籍列表
-  const filteredBooks = books.filter(b => {
-    // 按分类过滤（如果书中包含 categoryId 则严格匹配，否则不过滤）
-    if (selectedCategory !== null) {
-      const cId = (b as any).categoryId;
-      if (typeof cId !== 'undefined' && cId !== selectedCategory) return false;
-    }
-
-    // 按搜索词过滤
-    if (searchTerm && searchTerm.trim() !== '') {
-      const keyword = searchTerm.trim().toLowerCase();
-      const text = `${b.bookName} ${b.author}`.toLowerCase();
-      if (!text.includes(keyword)) return false;
-    }
-
-    return true;
-  });
-
-  const bookCardProps = filteredBooks.map(book => ({
-    bookId: book.bookId,
-    bookName: book.bookName,
-    imageUrl: book.imageUrl,
-    author: book.author,
-    price: book.price,
-    discountPrice: book.discountPrice,
-    points: book.points,
-    featureLabel: book.featureLabel
-  }));
 
   const clearFilters = () => {
     setSelectedCategory(null);
@@ -287,7 +259,7 @@ const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
                       <span className="font-medium">{category.name}</span>
                     </div>
                     <span className="text-sm text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
-                      {books.filter(b => b.categoryId === category.id).length}
+                      {selectedCategory === category.id ? books.length : category.bookCount}
                     </span>
                   </div>
                   {category.description && (
@@ -449,9 +421,8 @@ const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
             </h3>
             <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
               {categories
-                .filter(category => books.filter(b => b.categoryId === category.id).length > 0)
-                .sort((a, b) => books.filter(book => book.categoryId === b.id).length - 
-                               books.filter(book => book.categoryId === a.id).length)
+                .filter(category => selectedCategory === category.id || category.bookCount > 0)
+                .sort((a, b) => b.bookCount - a.bookCount)
                 .slice(0, 5)
                 .map((category) => (
                   <Link
@@ -466,7 +437,7 @@ const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
                     <i className={`fa ${category.icon} text-2xl text-blue-500 mb-2`}></i>
                     <p className="font-medium text-gray-800">{category.name}</p>
                     <p className="text-sm text-gray-500">
-                      {books.filter(b => b.categoryId === category.id).length} 本图书
+                      {selectedCategory === category.id ? books.length : category.bookCount} 本图书
                     </p>
                   </Link>
                 ))}

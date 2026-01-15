@@ -177,7 +177,7 @@ const BookOverview: React.FC<BookOverviewProps> = ({
                 >
                   <i className={`
                     fa ${isFavorited ? "fa-heart" : "fa-heart-o"} text-xl 
-                    ${isFavorited ? "text-red-500" : "text-neutral-600"}
+                    ${isFavorited ? "text-red-500" : "text-red-500"}
                   `}></i>
                 </button>
               </div>

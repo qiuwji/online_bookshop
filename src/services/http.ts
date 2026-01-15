@@ -16,6 +16,28 @@ type ApiResponse<T = any> = {
   data: T;
 };
 
+// ============ 工具函数 ============
+
+/**
+ * 将对象的所有键从下划线命名转换为驼峰命名
+ */
+function toCamelCase(obj: any): any {
+  if (obj === null || typeof obj !== 'object') {
+    return obj;
+  }
+
+  if (Array.isArray(obj)) {
+    return obj.map(toCamelCase);
+  }
+
+  const result: any = {};
+  for (const [key, value] of Object.entries(obj)) {
+    const camelKey = key.replace(/_([a-z])/g, (_, letter) => letter.toUpperCase());
+    result[camelKey] = toCamelCase(value);
+  }
+  return result;
+}
+
 // 扩展 AxiosRequestConfig 类型，添加自定义配置
 interface CustomRequestConfig extends Omit<AxiosRequestConfig, 'headers'> {
   // 是否跳过响应拦截器的统一处理（直接返回原始响应）
@@ -124,7 +146,7 @@ http.interceptors.response.use(
     // 返回处理后的数据
     return {
       ...response,
-      data: data.data,
+      data: toCamelCase(data.data),
       originalData: data, // 保留原始响应数据，方便调试
     };
   },

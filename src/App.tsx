@@ -6,8 +6,6 @@ import Footer from './component/Footer/Footer';
 import LoginPage from './pages/Login/LoginPage';
 import RegisterPage from './pages/Register/Register';
 import SearchResultPage from './pages/Seach/SearchResultPage';
-import BookDetail from './pages/BookDetail/component/BookOverview';
-import BookDetailTabs from './pages/BookDetail/component/BookDetailTabs';
 import BookDetailPage from './pages/BookDetail/BookDetailPage';
 import CollectionsPage from './pages/Collections/CollectionsPage';
 import ShoppingCartPage from './pages/ShoppingCart/ShoppingCartPage';
