@@ -4,6 +4,7 @@ import { getCart, updateCartItem, removeFromCart } from '@/services/cartService'
 import { useIsLogin } from '@/store/useAuthStore';
 import { Modal } from 'antd';
 import { ExclamationCircleFilled } from '@ant-design/icons';
+import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 
 interface CartItem {
   id: number;
@@ -23,6 +24,9 @@ interface CartItem {
 const SELECTED_CART_ITEMS_KEY = 'selected_cart_items';
 
 const ShoppingCartPage = () => {
+
+  useDocumentTitle("购物车");
+
   const navigate = useNavigate();
   const isLogin = useIsLogin();
   const [cartItems, setCartItems] = useState<CartItem[]>([]);

@@ -1,4 +1,4 @@
-import { useCartCount, useIsLogin } from "@/store/useAuthStore";
+import { useCartCount, useIsLogin, useAuthStore } from "@/store/useAuthStore"; // 引入 useAuthStore
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import BookStoreLogo from "../../assets/ONLINE-BOOKSTORE.jpeg";
@@ -18,6 +18,7 @@ const Header: React.FC = () => {
   const navigate = useNavigate();
   const isLogin = useIsLogin();
   const cartCount = useCartCount();
+  const { logout } = useAuthStore(); // 获取 logout 方法
   const currentPath = location.pathname;
 
   const [searchText, setSearchText] = useState("");
@@ -39,8 +40,15 @@ const Header: React.FC = () => {
       return;
     }
     console.log("搜索内容：", trimmed);
-    // 跳转到搜索结果页面，并传递搜索关键词
     navigate(`/search?keyword=${encodeURIComponent(trimmed)}`);
+  };
+
+  // 退出登录处理函数
+  const handleLogout = () => {
+    logout(); // 清除登录状态
+    showToast("已退出登录");
+    setIsMobileMenuOpen(false); // 关闭移动端菜单
+    navigate("/"); // 跳转到首页
   };
 
   return (
@@ -49,10 +57,8 @@ const Header: React.FC = () => {
 
       <header className="bg-white shadow-sm sticky top-0 z-40">
         <div className="container mx-auto px-4">
-
           {/* ===== 第一行 ===== */}
           <div className="flex items-center justify-between py-4">
-
             {/* Logo */}
             <Link to="/" className="flex items-center">
               <img src={BookStoreLogo} alt="线上书店logo" className="h-10 w-auto" />
@@ -95,10 +101,25 @@ const Header: React.FC = () => {
               )}
 
               {isLogin ? (
-                <span className="text-neutral-600 flex gap-2">
-                  <i className="fa fa-user" />
-                  欢迎回来
-                </span>
+                <>
+                  {/* 已登录状态 */}
+                  <div className="flex items-center gap-4">
+                    <span className="text-neutral-600 flex gap-2">
+                      <i className="fa fa-user" />
+                      欢迎回来
+                    </span>
+                    
+                    {/* 退出登录按钮 - 桌面端 */}
+                    <button
+                      onClick={handleLogout}
+                      className="text-neutral-600 hover:text-red-500 flex gap-2 items-center transition-colors"
+                      title="退出登录"
+                    >
+                      <i className="fa fa-sign-out" />
+                      退出
+                    </button>
+                  </div>
+                </>
               ) : (
                 <>
                   <Link to="/login" className="text-neutral-600 hover:text-blue-500 flex gap-2">
@@ -176,25 +197,49 @@ const Header: React.FC = () => {
           {!isLoginOrRegisterPage && isMobileMenuOpen && (
             <div className="md:hidden bg-white shadow-md rounded-md mb-4">
               <nav className="flex flex-col gap-3 p-4">
-                <Link to="/collections" className="flex gap-2">
+                <Link 
+                  to="/collections" 
+                  className="flex gap-2"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
                   <i className="fa fa-heart-o" />
                   我的收藏
                 </Link>
 
                 {isLogin ? (
-                  <Link to="/profile" className="flex gap-2">
-                    <i className="fa fa-user" />
-                    个人中心
-                  </Link>
+                  <>
+                    <Link 
+                      to="/profile" 
+                      className="flex gap-2"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      <i className="fa fa-user" />
+                      个人中心
+                    </Link>
+                    
+                    {/* 退出登录按钮 - 移动端 */}
+                    <button
+                      onClick={handleLogout}
+                      className="flex gap-2 text-left text-red-500 hover:text-red-600 py-2"
+                    >
+                      <i className="fa fa-sign-out" />
+                      退出登录
+                    </button>
+                  </>
                 ) : (
                   <>
-                    <Link to="/login" className="flex gap-2">
+                    <Link 
+                      to="/login" 
+                      className="flex gap-2"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
                       <i className="fa fa-sign-in" />
                       登录
                     </Link>
                     <Link
                       to="/register"
                       className="bg-blue-500 text-white text-center py-2 rounded-md flex justify-center gap-2"
+                      onClick={() => setIsMobileMenuOpen(false)}
                     >
                       <i className="fa fa-user-plus" />
                       注册

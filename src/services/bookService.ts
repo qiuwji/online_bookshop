@@ -58,11 +58,13 @@ export interface BookDetailData {
 }
 
 export const getNewBooks = (page: number = 1, size: number = 8): Promise<BooksListData> => {
+  // 直接构建URL，确保参数正确传递
   const url = `/books?page=${page}&size=${size}&sort=new`;
   return api.get<BooksListData>(url);
 };
 
 export const getHotBooks = (page: number = 1, size: number = 8): Promise<BooksListData> => {
+  // 直接构建URL，确保参数正确传递
   const url = `/books?page=${page}&size=${size}&sort=hot`;
   return api.get<BooksListData>(url);
 };
@@ -71,62 +73,46 @@ export const getHotBooks = (page: number = 1, size: number = 8): Promise<BooksLi
  * 获取图书列表
  */
 export const getBooks = (params: GetBooksParams = {}): Promise<BooksListData> => {
-  const defaultParams: any = {
-    page: params.page || 1,
-    size: params.size || 20,
-    ...params,
-  };
-
-  Object.keys(defaultParams).forEach(
-    key => defaultParams[key] === undefined && delete defaultParams[key]
-  );
-
-  return api.get<BooksListData>('/books', {
-    params: defaultParams,
-  });
+  // 构建查询字符串，确保参数正确传递给后端
+  const queryParams = new URLSearchParams();
+  
+  // 设置默认值
+  const page = params.page || 1;
+  const size = params.size || 8;
+  
+  queryParams.append('page', page.toString());
+  queryParams.append('size', size.toString());
+  
+  // 添加其他参数
+  if (params.sort) queryParams.append('sort', params.sort);
+  if (params.category) queryParams.append('category', params.category);
+  if (params.categorys) queryParams.append('categorys', params.categorys);
+  if (params.keyword) queryParams.append('keyword', params.keyword);
+  if (params.minPrice !== undefined) queryParams.append('minPrice', params.minPrice.toString());
+  if (params.maxPrice !== undefined) queryParams.append('maxPrice', params.maxPrice.toString());
+  if (params.scoreMin !== undefined) queryParams.append('scoreMin', params.scoreMin.toString());
+  
+  const url = `/books?${queryParams.toString()}`;
+  return api.get<BooksListData>(url);
 };
 
 /**
  * 按分类获取图书（单分类）
  */
-export const getBooksByCategory = (category: string, page: number = 1, size: number = 20): Promise<BooksListData> => {
-  return api.get<BooksListData>('/books', {
-    params: { 
-      category, 
-      page, 
-      size 
-    },
-  });
+export const getBooksByCategory = (category: string, page: number = 1, size: number = 8): Promise<BooksListData> => {
+  // 使用URLSearchParams确保参数正确传递
+  const queryParams = new URLSearchParams();
+  queryParams.append('category', category);
+  queryParams.append('page', page.toString());
+  queryParams.append('size', size.toString());
+  
+  const url = `/books?${queryParams.toString()}`;
+  return api.get<BooksListData>(url);
 };
 
 export const searchBooks = (params: GetBooksParams): Promise<BooksListData> => {
-  const defaultParams: any = {
-    page: params.page || 1,
-    size: params.size || 20,
-    ...params,
-  };
-
-  // 清理 undefined 参数
-  Object.keys(defaultParams).forEach(
-    key => defaultParams[key] === undefined && delete defaultParams[key]
-  );
-
-  // 直接构建查询字符串，避免 axios 的嵌套参数
-  const queryString = Object.keys(defaultParams)
-    .filter(key => defaultParams[key] !== null && defaultParams[key] !== undefined)
-    .map(key => {
-      const value = defaultParams[key];
-      // 处理数组类型的参数（如 categorys）
-      if (Array.isArray(value)) {
-        return `${key}=${value.join(',')}`;
-      }
-      return `${key}=${encodeURIComponent(value)}`;
-    })
-    .join('&');
-
-  const url = `/books${queryString ? '?' + queryString : ''}`;
-  
-  return api.get<BooksListData>(url);
+  // 直接复用getBooks函数，避免重复代码
+  return getBooks(params);
 };
 
 /**

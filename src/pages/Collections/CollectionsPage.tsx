@@ -1,12 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getCollections, removeCollection } from '@/services/collectionService';
+import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 
-/**
- * 注意：
- * 这里的类型要【和 collectionService 返回的 CollectionItem 对齐】
- * 不要再自己造一套字段名
- */
 interface CollectionItem {
   id: number;
   bookId: number;
@@ -18,6 +14,9 @@ interface CollectionItem {
 
 
 const CollectionsPage = () => {
+
+  useDocumentTitle("我的收藏");
+
   const [collections, setCollections] = useState<CollectionItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

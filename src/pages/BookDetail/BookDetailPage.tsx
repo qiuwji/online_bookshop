@@ -3,6 +3,7 @@ import BookOverview from './component/BookOverview';
 import BookDetailTabs from './component/BookDetailTabs';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getBookDetail } from '@/services/bookService';
+import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 
 /**
  * 这里的接口定义要和 api.ts 中 toCamelCase 处理后的字段一致
@@ -32,7 +33,7 @@ interface BookDetailPageProps {
 const BookDetailPage: React.FC<BookDetailPageProps> = ({ bookId }) => {
   const params = useParams<{ bookId: string }>();
   const navigate = useNavigate();
-  
+  useDocumentTitle("图书详情");
   // 获取实际的图书ID
   const actualBookId = bookId || (params?.bookId ? parseInt(params.bookId, 10) : null);
   
